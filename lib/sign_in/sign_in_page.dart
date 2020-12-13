@@ -24,7 +24,6 @@ class _SignInPageState extends State<SignInPage> {
         elevation: 2.0,
       ),
       body: _buildContent(context),
-      backgroundColor: Colors.grey[200],
     );
   }
 
