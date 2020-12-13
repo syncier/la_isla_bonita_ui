@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "452151120024",
+    "project_id": "ib-prototype",
+    "storage_bucket": "ib-prototype.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:452151120024:android:c1ce58d7dc48e4fedfc0ed",
+        "android_client_info": {
+          "package_name": "com.example.la_isla_Bonita_ui"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "452151120024-bfqkegtrl3bpv4rkbeh28a02picvn28p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.la_isla_Bonita_ui",
+            "certificate_hash": "4fdac2af309ad9814e4c274626de465673c2b747"
+          }
+        },
+        {
+          "client_id": "452151120024-lif4ua6r44ki6ch1tlur48rqppddnqhf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCO1rVa9gfrrBIKzZMJL2ogpIkZi858yrU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "452151120024-lif4ua6r44ki6ch1tlur48rqppddnqhf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
