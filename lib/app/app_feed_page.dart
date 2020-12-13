@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:la_isla_Bonita_ui/services/auth.dart';
 
 class AppFeedPage extends StatelessWidget {
-  const AppFeedPage({Key key, @required this.auth, @required this.onSignOut})
+  const AppFeedPage({Key key, @required this.auth})
       : super(key: key);
   final AuthBase auth;
-  final VoidCallback onSignOut;
 
   void _signOut() async {
     try {
       await auth.signOut();
-      onSignOut();
     } catch (e) {
       print(e.toString());
     }
