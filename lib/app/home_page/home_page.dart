@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:la_isla_Bonita_ui/home_page/page_button.dart';
+import 'package:la_isla_Bonita_ui/app/home_page/page_button.dart';
 
 class HomePage extends StatelessWidget {
   @override

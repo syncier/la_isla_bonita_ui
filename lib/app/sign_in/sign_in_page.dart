@@ -1,19 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:la_isla_Bonita_ui/common_widgets/custom_raised_button.dart';
-import 'package:la_isla_Bonita_ui/sign_in/sign_in_button.dart';
+import 'package:la_isla_Bonita_ui/app/sign_in/sign_in_button.dart';
+import 'package:la_isla_Bonita_ui/services/auth.dart';
 
-class SignInPage extends StatefulWidget {
-  @override
-  _SignInPageState createState() => _SignInPageState();
-}
+class SignInPage extends StatelessWidget {
+  const SignInPage({Key key, @required this.auth, @required this.onSignIn})
+      : super(key: key);
+  final AuthBase auth;
+  final void Function(User) onSignIn;
 
-
-
-class _SignInPageState extends State<SignInPage> {
   void _signInAnonymously() async {
-    final userCredentials = await FirebaseAuth.instance.signInAnonymously();
-    print('${userCredentials.user.uid}');
+    try {
+      final user = await auth.signInAnonymously();
+      onSignIn(user);
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   @override
@@ -60,7 +62,7 @@ class _SignInPageState extends State<SignInPage> {
               return null;
             },
           ),
-          SizedBox(height: 48.0),
+          SizedBox(height: 120.0),
           Text(
             'Password forgotten?',
             style: TextStyle(fontSize: 14, color: Colors.black87),
@@ -78,8 +80,8 @@ class _SignInPageState extends State<SignInPage> {
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 8.0),
-          CustomRaisedButton(
-            child: Text('Go Anonymous'),
+          SignInButton(
+            text: 'Go Anonymous',
             onPressed: _signInAnonymously,
           ),
         ],

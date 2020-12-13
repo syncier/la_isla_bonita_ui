@@ -1,7 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:la_isla_Bonita_ui/home_page/home_page.dart';
-import 'package:la_isla_Bonita_ui/sign_in/sign_in_page.dart';
+import 'package:la_isla_Bonita_ui/app/home_page/home_page.dart';
+import 'package:la_isla_Bonita_ui/app/landing_page.dart';
+import 'package:la_isla_Bonita_ui/services/auth.dart';
 import 'package:la_isla_Bonita_ui/themes/theme.dart';
 
 Future<void> main() async {
@@ -20,9 +21,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => HomePage(),
-        '/sign-in': (context) => SignInPage(),
+        '/sign-in': (context) => LandingPage(auth: Auth()),
       },
     );
   }
 }
-
