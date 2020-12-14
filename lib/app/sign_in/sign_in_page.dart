@@ -5,8 +5,7 @@ import 'package:la_isla_Bonita_ui/services/auth.dart';
 import 'email_sign_in_form.dart';
 
 class SignInPage extends StatelessWidget {
-  const SignInPage({Key key, @required this.auth})
-      : super(key: key);
+  const SignInPage({Key key, @required this.auth}) : super(key: key);
   final AuthBase auth;
 
   void _signInAnonymously() async {
@@ -36,7 +35,9 @@ class SignInPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          EmailSignInForm(),
+          EmailSignInForm(
+            auth: auth,
+          ),
           Text(
             'or',
             style: TextStyle(fontSize: 14, color: Colors.black87),
