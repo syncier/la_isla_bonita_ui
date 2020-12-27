@@ -29,26 +29,28 @@ class SignInPage extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          EmailSignInForm(
-            auth: auth,
-          ),
-          Text(
-            'or',
-            style: TextStyle(fontSize: 14, color: Colors.black87),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 8.0),
-          SignInButton(
-            text: 'Go Anonymous',
-            onPressed: _signInAnonymously,
-          ),
-        ],
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            EmailSignInForm(
+              auth: auth,
+            ),
+            Text(
+              'or',
+              style: TextStyle(fontSize: 14, color: Colors.black87),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 8.0),
+            SignInButton(
+              text: 'Go Anonymous',
+              onPressed: _signInAnonymously,
+            ),
+          ],
+        ),
       ),
     );
   }
