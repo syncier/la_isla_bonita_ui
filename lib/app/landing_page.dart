@@ -18,8 +18,7 @@ class LandingPage extends StatelessWidget {
             if (user == null) {
               return SignInPage(auth: auth);
             }
-            return AppFeedPage(
-                auth: auth);
+            return AppFeedPage(auth: auth);
           }
           return Scaffold(
             body: Center(

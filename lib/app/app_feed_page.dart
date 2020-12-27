@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:la_isla_Bonita_ui/services/auth.dart';
 
 class AppFeedPage extends StatelessWidget {
-  const AppFeedPage({Key key, @required this.auth})
-      : super(key: key);
+  const AppFeedPage({Key key, @required this.auth}) : super(key: key);
   final AuthBase auth;
 
   void _signOut() async {
