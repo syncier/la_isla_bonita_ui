@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:la_isla_Bonita_ui/app/sign_in/sign_in_button.dart';
 import 'package:la_isla_Bonita_ui/services/auth.dart';
+import 'package:provider/provider.dart';
 
 import 'email_sign_in_form.dart';
 
 class SignInPage extends StatelessWidget {
-  const SignInPage({Key key, @required this.auth}) : super(key: key);
-  final AuthBase auth;
-
-  void _signInAnonymously() async {
+  void _signInAnonymously(BuildContext context) async {
     try {
+      final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.signInAnonymously();
     } catch (e) {
       print(e.toString());
@@ -36,9 +35,7 @@ class SignInPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            EmailSignInForm(
-              auth: auth,
-            ),
+            EmailSignInForm(),
             Text(
               'or',
               style: TextStyle(fontSize: 14, color: Colors.black87),
@@ -47,7 +44,7 @@ class SignInPage extends StatelessWidget {
             SizedBox(height: 8.0),
             SignInButton(
               text: 'Go Anonymous',
-              onPressed: _signInAnonymously,
+              onPressed: () => _signInAnonymously(context),
             ),
           ],
         ),

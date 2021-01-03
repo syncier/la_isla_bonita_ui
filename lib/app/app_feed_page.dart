@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:la_isla_Bonita_ui/common_widgets/show_alert_dialog.dart';
 import 'package:la_isla_Bonita_ui/services/auth.dart';
+import 'package:provider/provider.dart';
 
 class AppFeedPage extends StatelessWidget {
-  const AppFeedPage({Key key, @required this.auth}) : super(key: key);
-  final AuthBase auth;
-
-  void _signOut() async {
+  void _signOut(BuildContext context) async {
     try {
+      final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.signOut();
     } catch (e) {
       print(e.toString());
@@ -23,7 +22,7 @@ class AppFeedPage extends StatelessWidget {
       defaultActionText: 'Logout',
     );
     if (didRequestSignOut == true) {
-      _signOut();
+      _signOut(context);
     }
   }
 
