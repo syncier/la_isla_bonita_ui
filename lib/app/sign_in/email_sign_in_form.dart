@@ -15,17 +15,21 @@ class EmailSignInForm extends StatefulWidget with EmailAndPasswordValidators {
 
   Stream<bool> isLoadingFromSignInForm;
 
-  EmailSignInForm({@required this.isLoadingFromEmailForm,  @required this.isLoadingFromSignInForm});
+  EmailSignInForm(
+      {@required this.isLoadingFromEmailForm,
+      @required this.isLoadingFromSignInForm});
 
   @override
-  EmailSignInFormState createState() => EmailSignInFormState(this.isLoadingFromEmailForm, this.isLoadingFromSignInForm);
+  EmailSignInFormState createState() => EmailSignInFormState(
+      this.isLoadingFromEmailForm, this.isLoadingFromSignInForm);
 }
 
 class EmailSignInFormState extends State<EmailSignInForm> {
   BoolCallback isLoadingParent;
   StreamSubscription loadingStateSubscription;
 
-  EmailSignInFormState(this.isLoadingParent, Stream<bool> isLoadingFromSignInForm) {
+  EmailSignInFormState(
+      this.isLoadingParent, Stream<bool> isLoadingFromSignInForm) {
     loadingStateSubscription = isLoadingFromSignInForm.listen((event) {
       setState(() {
         isLoading = event;
@@ -104,6 +108,10 @@ class EmailSignInFormState extends State<EmailSignInForm> {
         !isLoading;
 
     return [
+      SizedBox(
+        height: 50.0,
+        child: _buildHeader(),
+      ),
       _buildEmailTextField(),
       SizedBox(height: 8.0),
       _buildPasswordTextField(),
@@ -118,8 +126,7 @@ class EmailSignInFormState extends State<EmailSignInForm> {
   }
 
   TextField _buildPasswordTextField() {
-    bool showErrorText =
-        submitted && !widget.emailValidator.isValid(_password);
+    bool showErrorText = submitted && !widget.emailValidator.isValid(_password);
     return TextField(
       controller: _passwordController,
       focusNode: _passwordFocusNode,
@@ -165,10 +172,30 @@ class EmailSignInFormState extends State<EmailSignInForm> {
   _updateState() {
     setState(() {});
   }
+
   @override
   void dispose() {
     loadingStateSubscription.cancel();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
     super.dispose();
+  }
+
+  Widget _buildHeader() {
+    if (isLoading) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    return Text(
+      _formType == EmailSignInFormType.signIn
+          ? 'Sign in'
+          : 'Sign up',
+      textAlign: TextAlign.center,
+      style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.w600),
+    );
   }
 }
 

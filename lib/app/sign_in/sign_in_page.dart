@@ -16,8 +16,8 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   bool _isLoading = false;
-  StreamController<bool> _isLoadingChild = StreamController();
-  Stream<bool> get isLoadingChild => _isLoadingChild.stream;
+  StreamController<bool> _isLoadingChildController = StreamController();
+  Stream<bool> get isLoadingChild => _isLoadingChildController.stream;
 
   void _showSignInError(BuildContext context, Exception exception) {
     if (exception is FirebaseException &&
@@ -32,14 +32,14 @@ class _SignInPageState extends State<SignInPage> {
   void _signInAnonymously(BuildContext context) async {
     try {
       setState(() => _isLoading = true);
-      _isLoadingChild.add(_isLoading);
+      _isLoadingChildController.add(_isLoading);
       final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.signInAnonymously();
     } on Exception catch (e) {
       _showSignInError(context, e);
     } finally {
       setState(() => _isLoading = false);
-      _isLoadingChild.add(_isLoading);
+      _isLoadingChildController.add(_isLoading);
     }
   }
 
@@ -87,5 +87,11 @@ class _SignInPageState extends State<SignInPage> {
         ),
       ),
     );
+  }
+  
+  @override
+  void dispose(){
+    _isLoadingChildController.close();
+    super.dispose();
   }
 }
