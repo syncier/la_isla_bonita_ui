@@ -55,8 +55,10 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  BoolCallback isLoadingFromEmailForm(bool isLoading) {
-    print(isLoading);
+  BoolCallback isLoadingFromEmailForm(bool loadingState) {
+    setState(() {
+      _isLoading = loadingState;
+    });
   }
 
   Widget _buildContent(BuildContext context) {
@@ -79,7 +81,7 @@ class _SignInPageState extends State<SignInPage> {
             SizedBox(height: 8.0),
             SignInButton(
               text: 'Go Anonymous',
-              onPressed: () => _signInAnonymously(context),
+              onPressed: _isLoading ? null : () => _signInAnonymously(context),
             ),
           ],
         ),
