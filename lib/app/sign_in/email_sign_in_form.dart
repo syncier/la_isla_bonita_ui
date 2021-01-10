@@ -1,18 +1,42 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:la_isla_Bonita_ui/app/sign_in/sign_in_button.dart';
 import 'package:la_isla_Bonita_ui/app/sign_in/validators.dart';
-import 'package:la_isla_Bonita_ui/common_widgets/show_alert_dialog.dart';
+import 'package:la_isla_Bonita_ui/common_widgets/show_exception_alert_dialog.dart';
 import 'package:la_isla_Bonita_ui/services/auth.dart';
 import 'package:provider/provider.dart';
 
 enum EmailSignInFormType { signIn, register }
 
 class EmailSignInForm extends StatefulWidget with EmailAndPasswordValidators {
+  BoolCallback isLoadingFromEmailForm;
+
+  Stream<bool> isLoadingFromSignInForm;
+
+  EmailSignInForm(
+      {@required this.isLoadingFromEmailForm,
+      @required this.isLoadingFromSignInForm});
+
   @override
-  _EmailSignInFormState createState() => _EmailSignInFormState();
+  EmailSignInFormState createState() => EmailSignInFormState(
+      this.isLoadingFromEmailForm, this.isLoadingFromSignInForm);
 }
 
-class _EmailSignInFormState extends State<EmailSignInForm> {
+class EmailSignInFormState extends State<EmailSignInForm> {
+  BoolCallback isLoadingParent;
+  StreamSubscription loadingStateSubscription;
+
+  EmailSignInFormState(
+      this.isLoadingParent, Stream<bool> isLoadingFromSignInForm) {
+    loadingStateSubscription = isLoadingFromSignInForm.listen((event) {
+      setState(() {
+        isLoading = event;
+      });
+    });
+  }
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FocusNode _emailFocusNode = FocusNode();
@@ -22,14 +46,15 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   String get _password => _passwordController.text;
 
   EmailSignInFormType _formType = EmailSignInFormType.signIn;
-  bool _submitted = false;
-  bool _isLoading = false;
+  bool submitted = false;
+  bool isLoading = false;
 
   void _submit() async {
     setState(() {
-      _submitted = true;
-      _isLoading = true;
+      submitted = true;
+      isLoading = true;
     });
+    isLoadingParent(true);
     try {
       final auth = Provider.of<AuthBase>(context, listen: false);
       if (_formType == EmailSignInFormType.signIn) {
@@ -38,15 +63,17 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         await auth.createUserWithEmailAndPassword(_email, _password);
       }
       Navigator.of(context).pop();
-    } catch (e) {
-      showAlertDialog(context,
-          title: 'Sign in failed',
-          content: e.toString(),
-          defaultActionText: 'OK');
+    } on FirebaseAuthException catch (e) {
+      showExceptionAlertDialog(
+        context,
+        title: 'Sign in failed',
+        exception: e,
+      );
     } finally {
       setState(() {
-        _isLoading = false;
+        isLoading = false;
       });
+      isLoadingParent(false);
     }
   }
 
@@ -59,7 +86,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 
   void _toggleFormType() {
     setState(() {
-      _submitted = false;
+      submitted = false;
       _formType = _formType == EmailSignInFormType.signIn
           ? EmailSignInFormType.register
           : EmailSignInFormType.signIn;
@@ -78,9 +105,13 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 
     bool submitEnabled = widget.emailValidator.isValid(_email) &&
         widget.passwordValidator.isValid(_password) &&
-        !_isLoading;
+        !isLoading;
 
     return [
+      SizedBox(
+        height: 50.0,
+        child: _buildHeader(),
+      ),
       _buildEmailTextField(),
       SizedBox(height: 8.0),
       _buildPasswordTextField(),
@@ -89,19 +120,18 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
           text: primaryText, onPressed: submitEnabled ? _submit : null),
       SizedBox(height: 8.0),
       FlatButton(
-          onPressed: !_isLoading ? _toggleFormType : null,
+          onPressed: !isLoading ? _toggleFormType : null,
           child: Text(secondaryText))
     ];
   }
 
   TextField _buildPasswordTextField() {
-    bool showErrorText =
-        _submitted && !widget.emailValidator.isValid(_password);
+    bool showErrorText = submitted && !widget.emailValidator.isValid(_password);
     return TextField(
       controller: _passwordController,
       focusNode: _passwordFocusNode,
       decoration: InputDecoration(
-          enabled: _isLoading == false,
+          enabled: isLoading == false,
           labelText: 'Password',
           errorText: showErrorText ? widget.invalidPasswordErrorText : null),
       obscureText: true,
@@ -112,12 +142,12 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   }
 
   TextField _buildEmailTextField() {
-    bool showErrorText = _submitted && !widget.emailValidator.isValid(_email);
+    bool showErrorText = submitted && !widget.emailValidator.isValid(_email);
     return TextField(
       controller: _emailController,
       focusNode: _emailFocusNode,
       decoration: InputDecoration(
-          enabled: _isLoading == false,
+          enabled: isLoading == false,
           labelText: 'Email',
           hintText: 'test@test.com',
           errorText: showErrorText ? widget.invalidEmailErrorText : null),
@@ -142,4 +172,31 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   _updateState() {
     setState(() {});
   }
+
+  @override
+  void dispose() {
+    loadingStateSubscription.cancel();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
+
+  Widget _buildHeader() {
+    if (isLoading) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    return Text(
+      _formType == EmailSignInFormType.signIn
+          ? 'Sign in'
+          : 'Sign up',
+      textAlign: TextAlign.center,
+      style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.w600),
+    );
+  }
 }
+
+typedef void BoolCallback(bool val);
