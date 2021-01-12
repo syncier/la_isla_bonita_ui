@@ -1,13 +1,10 @@
-import 'dart:async';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:la_isla_Bonita_ui/app/sign_in/email_sign_in_form.dart';
 import 'package:la_isla_Bonita_ui/app/sign_in/sign_in_button.dart';
 import 'package:la_isla_Bonita_ui/common_widgets/show_exception_alert_dialog.dart';
 import 'package:la_isla_Bonita_ui/services/auth.dart';
 import 'package:provider/provider.dart';
-
-import 'email_sign_in_form.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -16,8 +13,6 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   bool _isLoading = false;
-  StreamController<bool> _isLoadingChildController = StreamController();
-  Stream<bool> get isLoadingChild => _isLoadingChildController.stream;
 
   void _showSignInError(BuildContext context, Exception exception) {
     if (exception is FirebaseException &&
@@ -32,14 +27,12 @@ class _SignInPageState extends State<SignInPage> {
   void _signInAnonymously(BuildContext context) async {
     try {
       setState(() => _isLoading = true);
-      _isLoadingChildController.add(_isLoading);
       final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.signInAnonymously();
     } on Exception catch (e) {
       _showSignInError(context, e);
     } finally {
       setState(() => _isLoading = false);
-      _isLoadingChildController.add(_isLoading);
     }
   }
 
@@ -55,12 +48,6 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  BoolCallback isLoadingFromEmailForm(bool loadingState) {
-    setState(() {
-      _isLoading = loadingState;
-    });
-  }
-
   Widget _buildContent(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
@@ -69,10 +56,7 @@ class _SignInPageState extends State<SignInPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            EmailSignInForm(
-              isLoadingFromEmailForm: isLoadingFromEmailForm,
-              isLoadingFromSignInForm: isLoadingChild,
-            ),
+            EmailSignInForm.create(context),
             Text(
               'or',
               style: TextStyle(fontSize: 14, color: Colors.black87),
@@ -88,10 +72,9 @@ class _SignInPageState extends State<SignInPage> {
       ),
     );
   }
-  
+
   @override
-  void dispose(){
-    _isLoadingChildController.close();
+  void dispose() {
     super.dispose();
   }
 }
