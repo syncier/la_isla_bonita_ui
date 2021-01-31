@@ -27,5 +27,5 @@ class AppTheme {
     ),
   );
 
-  static final ThemeData darkTheme = ThemeData.dark();
+  static final ThemeData darkTheme = lightTheme;
 }

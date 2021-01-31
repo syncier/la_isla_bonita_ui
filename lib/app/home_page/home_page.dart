@@ -29,7 +29,7 @@ class HomePage extends StatelessWidget {
           PageButton(
             text: 'Sign in page',
             onPressed: () {
-              Navigator.pushNamed(context, '/sign-in');
+              Navigator.pushReplacementNamed(context, '/sign-in');
             },
           ),
           SizedBox(height: 16.0),
