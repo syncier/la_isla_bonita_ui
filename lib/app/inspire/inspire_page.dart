@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:la_isla_Bonita_ui/blocs/blocs.dart';
+import 'package:la_isla_Bonita_ui/common_widgets/custom_raised_button.dart';
+import 'package:la_isla_Bonita_ui/models/articles.dart';
 
 class InspirePage extends StatefulWidget {
   @override
@@ -50,18 +54,34 @@ class _InspirePageState extends State<InspirePage> {
             ),
           ),
         ),
-        Card(
-          semanticContainer: true,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: Image.network(
-            'https://placeimg.com/720/960/any',
-            fit: BoxFit.fill,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          elevation: 3,
-          margin: EdgeInsets.all(10),
+        CustomRaisedButton(
+          child: Text('Get News'),
+          onPressed: () {
+            print('something');
+            final query = ArticlesQuery.buildQuery(query: 'ocean');
+            BlocProvider.of<NewsBloc>(context).add(NewsRequested(query: query));
+          },
+        ),
+        BlocBuilder<NewsBloc, NewsState>(
+          builder: (context, state) {
+            print(state is NewsLoadSuccess);
+            if (state is NewsLoadSuccess) {
+              print(state.news.articles[0].title);
+          }
+          return Card(
+              semanticContainer: true,
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              child: Image.network(
+                'https://placeimg.com/720/720/any',
+                fit: BoxFit.fill,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              elevation: 3,
+              margin: EdgeInsets.all(10),
+            );
+          }
         ),
       ],
     );
