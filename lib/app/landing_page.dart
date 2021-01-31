@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:la_isla_Bonita_ui/app/app_feed_page.dart';
+import 'package:la_isla_Bonita_ui/app/app_feed_page/app_feed_page.dart';
 import 'package:la_isla_Bonita_ui/app/sign_in/sign_in_page.dart';
 import 'package:la_isla_Bonita_ui/services/auth.dart';
 import 'package:provider/provider.dart';
