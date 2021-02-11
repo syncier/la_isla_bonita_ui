@@ -57,7 +57,6 @@ class EmailSignInBloc {
     bool isLoading,
     bool submitted,
   }) {
-    // update model
     _modelSubject.value = _model.copyWith(
       email: email,
       password: password,
