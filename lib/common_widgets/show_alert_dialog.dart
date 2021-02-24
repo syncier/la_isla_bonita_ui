@@ -27,19 +27,21 @@ Future<bool> showAlertDialog(BuildContext context,
             ));
   }
   return showCupertinoDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-            title: Text(title),
-            content: Text(content),
-            actions: <Widget>[
-              if (cancelActionText != null)
-                CupertinoDialogAction(
-                  child: Text(cancelActionText),
-                  onPressed: () => Navigator.of(context).pop(false),
-                ),
-              CupertinoDialogAction(
-                  onPressed: () => Navigator.of(context).pop(true),
-                  child: Text(defaultActionText))
-            ],
-          ));
+    context: context,
+    builder: (context) => CupertinoAlertDialog(
+      title: Text(title),
+      content: Text(content),
+      actions: <Widget>[
+        if (cancelActionText != null)
+          CupertinoDialogAction(
+            child: Text(cancelActionText),
+            onPressed: () => Navigator.of(context).pop(false),
+          ),
+        CupertinoDialogAction(
+          child: Text(defaultActionText),
+          onPressed: () => Navigator.of(context).pop(true),
+        ),
+      ],
+    ),
+  );
 }
