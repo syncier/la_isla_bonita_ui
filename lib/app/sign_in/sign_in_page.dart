@@ -60,13 +60,13 @@ class SignInPage extends StatelessWidget {
     }
   }
 
-  Future<void> _signInWithFacebook(BuildContext context) async {
-    try {
-      await manager.signInWithFacebook();
-    } on Exception catch (e) {
-      _showSignInError(context, e);
-    }
-  }
+  // Future<void> _signInWithFacebook(BuildContext context) async {
+  //   try {
+  //     await manager.signInWithFacebook();
+  //   } on Exception catch (e) {
+  //     _showSignInError(context, e);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +98,11 @@ class SignInPage extends StatelessWidget {
             SignInButton(
               text: 'Go Anonymous',
               onPressed: isLoading ? null : () => _signInAnonymously(context),
+            ),
+            SizedBox(height: 8.0),
+            SignInButton(
+              text: 'Sign in with Google',
+              onPressed: isLoading ? null : () => _signInWithGoogle(context),
             ),
           ],
         ),
