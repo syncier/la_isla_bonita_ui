@@ -2,17 +2,37 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:la_isla_Bonita_ui/app/sign_in/email_sign_in_form.dart';
 import 'package:la_isla_Bonita_ui/app/sign_in/sign_in_button.dart';
+import 'package:la_isla_Bonita_ui/app/sign_in/sign_in_manager.dart';
 import 'package:la_isla_Bonita_ui/common_widgets/show_exception_alert_dialog.dart';
 import 'package:la_isla_Bonita_ui/services/auth.dart';
 import 'package:provider/provider.dart';
 
-class SignInPage extends StatefulWidget {
-  @override
-  _SignInPageState createState() => _SignInPageState();
-}
+class SignInPage extends StatelessWidget {
+  const SignInPage({
+    Key key,
+    @required this.manager,
+    @required this.isLoading,
+  }) : super(key: key);
+  final SignInManager manager;
+  final bool isLoading;
 
-class _SignInPageState extends State<SignInPage> {
-  bool _isLoading = false;
+  static const Key emailPasswordKey = Key('email-password');
+
+  static Widget create(BuildContext context) {
+    final auth = Provider.of<AuthBase>(context, listen: false);
+    return ChangeNotifierProvider<ValueNotifier<bool>>(
+      create: (_) => ValueNotifier<bool>(false),
+      child: Consumer<ValueNotifier<bool>>(
+        builder: (_, isLoading, __) => Provider<SignInManager>(
+          create: (_) => SignInManager(auth: auth, isLoading: isLoading),
+          child: Consumer<SignInManager>(
+            builder: (_, manager, __) =>
+                SignInPage(manager: manager, isLoading: isLoading.value),
+          ),
+        ),
+      ),
+    );
+  }
 
   void _showSignInError(BuildContext context, Exception exception) {
     if (exception is FirebaseException &&
@@ -24,22 +44,34 @@ class _SignInPageState extends State<SignInPage> {
         title: 'Sign in failed', exception: exception);
   }
 
-  void _signInAnonymously(BuildContext context) async {
+  Future<void> _signInAnonymously(BuildContext context) async {
     try {
-      setState(() => _isLoading = true);
-      final auth = Provider.of<AuthBase>(context, listen: false);
-      await auth.signInAnonymously();
+      await manager.signInAnonymously();
     } on Exception catch (e) {
       _showSignInError(context, e);
-    } finally {
-      setState(() => _isLoading = false);
     }
   }
+
+  Future<void> _signInWithGoogle(BuildContext context) async {
+    try {
+      await manager.signInWithGoogle();
+    } on Exception catch (e) {
+      _showSignInError(context, e);
+    }
+  }
+
+  // Future<void> _signInWithFacebook(BuildContext context) async {
+  //   try {
+  //     await manager.signInWithFacebook();
+  //   } on Exception catch (e) {
+  //     _showSignInError(context, e);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: true,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text('Welcome!!!'),
         elevation: 2.0,
@@ -65,16 +97,16 @@ class _SignInPageState extends State<SignInPage> {
             SizedBox(height: 8.0),
             SignInButton(
               text: 'Go Anonymous',
-              onPressed: _isLoading ? null : () => _signInAnonymously(context),
+              onPressed: isLoading ? null : () => _signInAnonymously(context),
+            ),
+            SizedBox(height: 8.0),
+            SignInButton(
+              text: 'Sign in with Google',
+              onPressed: isLoading ? null : () => _signInWithGoogle(context),
             ),
           ],
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }
