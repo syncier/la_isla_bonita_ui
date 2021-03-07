@@ -31,11 +31,19 @@ class DailyPage extends StatelessWidget {
             semanticContainer: true,
             clipBehavior: Clip.antiAliasWithSaveLayer,
             child: StoryView(
-              controller: storyController,
-              storyItems: _buildStoryItems(state),
-              progressPosition: ProgressPosition.top,
-              repeat: false,
-            ),
+                controller: storyController,
+                storyItems: _buildStoryItems(state),
+                inline: true,
+                progressPosition: ProgressPosition.top,
+                repeat: true,
+                onVerticalSwipeComplete: (direction) {
+                  if (direction == Direction.up) {
+                    // Navigator.pop(context);
+                    print(context);
+                  }
+                } // To disable vertical swipe gestures, ignore this parameter.
+                // Preferrably for inline story view.
+                ),
             elevation: 0,
             margin: EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
           ),

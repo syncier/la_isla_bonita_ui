@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   void _signOut(BuildContext context) async {
     try {
@@ -33,6 +33,9 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Column(children: [
+        SizedBox(
+          height: 40.0,
+        ),
         Text(
           'Index 2: Profile',
           style: optionStyle,
