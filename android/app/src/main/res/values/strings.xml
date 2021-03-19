@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Isla Bonita</string>
+    <string name="facebook_app_id">1142175002911808</string>
+    <string name="fb_login_protocol_scheme">fb1142175002911808</string>
+</resources>

@@ -14,7 +14,7 @@ class NewsApiClient {
   Future<NewsApiResponse> fetchWeather(ArticlesQuery query) async {
     final newsUrl =
         '$baseUrl/v2/everything' + query.getParams();
-    final newsResponse = await this.httpClient.get(newsUrl);
+    final newsResponse = await this.httpClient.get(Uri.parse(newsUrl));
 
     if (newsResponse.statusCode != 200) {
       throw Exception('error getting news');
