@@ -24,3 +24,7 @@ class NewsApiClient {
     return NewsApiResponse.fromJson(newsJson);
   }
 }
+
+// http://127.0.0.1:8080/rss/
+// http://127.0.0.1:8080/swagger-ui/index.html
+// curl -X GET "http://127.0.0.1:8080/rss/" -H "accept: */*"
