@@ -46,6 +46,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   Future<void> _submit() async {
     try {
       await widget.bloc.submit();
+      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       showExceptionAlertDialog(
         context,
@@ -80,7 +81,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         onPressed: model.canSubmit ? _submit : null,
       ),
       SizedBox(height: 8.0),
-      FlatButton(
+      TextButton(
         child: Text(model.secondaryButtonText),
         onPressed: !model.isLoading ? _toggleFormType : null,
       ),

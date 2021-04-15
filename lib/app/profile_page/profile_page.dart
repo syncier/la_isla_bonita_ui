@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:la_isla_Bonita_ui/app/sign_in/sign_in_page.dart';
 import 'package:la_isla_Bonita_ui/common_widgets/show_alert_dialog.dart';
 import 'package:la_isla_Bonita_ui/services/auth.dart';
 import 'package:provider/provider.dart';
@@ -31,22 +33,53 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(children: [
-        SizedBox(
-          height: 40.0,
-        ),
-        Text(
-          'Index 2: Profile',
-          style: optionStyle,
-        ),
-        RaisedButton(
-            onPressed: () => _confirmSignOut(context),
-            child: Text(
-              'Log out',
-              style: TextStyle(fontSize: 18, color: Colors.white),
-            ))
-      ]),
-    );
+    final auth = Provider.of<AuthBase>(context, listen: false);
+    return StreamBuilder<User>(
+        stream: auth.authStateChanges(),
+        builder: (context, snapshot) {
+          List<Widget> signInButton = [CircularProgressIndicator()];
+          if (snapshot.connectionState == ConnectionState.active) {
+            final User user = snapshot.data;
+            if (user == null) {
+              signInButton = [
+                Text('Guest'),
+                ElevatedButton(
+                    onPressed: () => _openSignIn(context),
+                    child: Text(
+                      'Sign in',
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ))
+              ];
+            } else {
+              signInButton = [
+                Text(user.displayName ?? user.email ?? 'Anonymous'),
+                ElevatedButton(
+                    onPressed: () => _confirmSignOut(context),
+                    child: Text(
+                      'Log out',
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ))
+              ];
+            }
+          }
+          return Center(
+            child: Column(children: [
+              SizedBox(
+                height: 40.0,
+              ),
+              Text(
+                'Index 2: Profile',
+                style: optionStyle,
+              ),
+              ...signInButton,
+            ]),
+          );
+        });
+  }
+
+  void _openSignIn(BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (_) {
+      return SignInPage.create(context);
+    }));
   }
 }
