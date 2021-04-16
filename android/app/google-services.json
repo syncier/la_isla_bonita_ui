@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:452151120024:android:c1ce58d7dc48e4fedfc0ed",
         "android_client_info": {
-          "package_name": "com.example.la_isla_Bonita_ui"
+          "package_name": "app.islabonita"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "452151120024-bfqkegtrl3bpv4rkbeh28a02picvn28p.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.la_isla_Bonita_ui",
+            "package_name": "app.islabonita",
             "certificate_hash": "4fdac2af309ad9814e4c274626de465673c2b747"
           }
         },
