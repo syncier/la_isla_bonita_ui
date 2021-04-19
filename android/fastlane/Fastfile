@@ -40,15 +40,25 @@ platform :android do
     build_number = getNextBuildNumber
     sha1 = options[:SHA1]
     version_string = "#{build_name}-#{build_number}"
+    # save the version string for the GH action
     sh "echo #{version_string} > ../android_version_string.txt"
-    # Build the application using the
-    # specified scheme.
     Dir.chdir "../.." do
       sh("flutter", "clean")
       sh("flutter", "build", "appbundle", "--target-platform", "android-arm,android-arm64", "--release",
         "--build-name", build_name, "--build-number", build_number, "--dart-define=gitSHA=#{sha1}")
     end
   end
+
+  lane :push_to_ps_internal do |options|
+    build_name, build_number = options[:version_string].split("-")
+    upload_to_play_store(
+      version_code: build_number,
+      aab: '../build/app/outputs/bundle/release/app-release.aab',
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      release_status: draft,
+      track: 'internal')
+    end
 
   lane :promote_to_alpha do |options|
     build_name, build_number = options[:version_string].split("-")

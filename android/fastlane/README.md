@@ -31,6 +31,11 @@ fastlane android getBuildNameFromPubspec
 fastlane android build_android
 ```
 
+### android push_to_ps_internal
+```
+fastlane android push_to_ps_internal
+```
+
 ### android promote_to_alpha
 ```
 fastlane android promote_to_alpha
