@@ -8,12 +8,14 @@ class EmailSignInModel with EmailAndPasswordValidators {
   EmailSignInModel({
     this.email = '',
     this.password = '',
+    this.username = '',
     this.formType = EmailSignInFormType.signIn,
     this.isLoading = false,
     this.submitted = false,
   });
   final String email;
   final String password;
+  final String username;
   final EmailSignInFormType formType;
   final bool isLoading;
   final bool submitted;
@@ -55,6 +57,7 @@ class EmailSignInModel with EmailAndPasswordValidators {
   EmailSignInModel copyWith({
     String email,
     String password,
+    String username,
     EmailSignInFormType formType,
     bool isLoading,
     bool submitted,
@@ -62,6 +65,7 @@ class EmailSignInModel with EmailAndPasswordValidators {
     return EmailSignInModel(
       email: email ?? this.email,
       password: password ?? this.password,
+      username: username ?? this.username,
       formType: formType ?? this.formType,
       isLoading: isLoading ?? this.isLoading,
       submitted: submitted ?? this.submitted,
@@ -70,7 +74,7 @@ class EmailSignInModel with EmailAndPasswordValidators {
 
   @override
   int get hashCode =>
-      hashValues(email, password, formType, isLoading, submitted);
+      hashValues(email, password, username, formType, isLoading, submitted);
 
   @override
   bool operator ==(other) {
@@ -79,6 +83,7 @@ class EmailSignInModel with EmailAndPasswordValidators {
     final EmailSignInModel otherModel = other;
     return email == otherModel.email &&
         password == otherModel.password &&
+        username == otherModel.username &&
         formType == otherModel.formType &&
         isLoading == otherModel.isLoading &&
         submitted == otherModel.submitted;
@@ -86,6 +91,6 @@ class EmailSignInModel with EmailAndPasswordValidators {
 
   @override
   String toString() =>
-      'email: $email, password: $password, formType: $formType, isLoading: $isLoading, submitted: $submitted';
+      'email: $email, password: $password, username: $username, formType: $formType, isLoading: $isLoading, submitted: $submitted';
 
 }

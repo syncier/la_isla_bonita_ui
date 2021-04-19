@@ -29,8 +29,10 @@ class EmailSignInForm extends StatefulWidget {
 }
 
 class _EmailSignInFormState extends State<EmailSignInForm> {
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final FocusNode _usernameFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
 
@@ -57,9 +59,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   }
 
   void _emailEditingComplete(EmailSignInModel model) {
-    final newFocus = model.emailValidator.isValid(model.email)
-        ? _passwordFocusNode
-        : _emailFocusNode;
+    final newFocus = _emailFocusNode;
     FocusScope.of(context).requestFocus(newFocus);
   }
 
@@ -72,6 +72,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   List<Widget> _buildChildren(EmailSignInModel model) {
     return [
       _buildHeader(model),
+      ..._buildSignUpFields(model),
       _buildEmailTextField(model),
       SizedBox(height: 8.0),
       _buildPasswordTextField(model),
@@ -120,6 +121,32 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       onChanged: widget.bloc.updateEmail,
       onEditingComplete: () => _emailEditingComplete(model),
     );
+  }
+
+  List<Widget> _buildSignUpFields(EmailSignInModel model) {
+    if (model.formType == EmailSignInFormType.register) {
+      return [
+        TextField(
+          controller: _usernameController,
+          focusNode: _usernameFocusNode,
+          decoration: InputDecoration(
+            icon: Icon(Icons.tag_faces_outlined),
+            labelText: 'Name',
+            hintText: 'Name',
+            enabled: model.isLoading == false,
+          ),
+          autocorrect: false,
+          keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.next,
+          onChanged: widget.bloc.updateUsername,
+          onEditingComplete: () => _emailEditingComplete(model),
+        )
+      ];
+    }
+
+    if (model.formType == EmailSignInFormType.signIn) {
+      return [];
+    }
   }
 
   @override

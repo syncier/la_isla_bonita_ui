@@ -11,21 +11,23 @@ class ActPage extends StatelessWidget {
     'Mobility',
     'Plastic',
     'Zero-Waste',
-    'Option 5',
-    'Option 6'
+    'Ocean',
   ];
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Column(children: [
+        SizedBox(
+          height: 40,
+        ),
         Text(
           'Index 1: Act',
           style: optionStyle,
         ),
         Padding(
           padding:
-          EdgeInsets.only(left: 8.0, right: 8.0, bottom: 0.0, top: 8.0),
+              EdgeInsets.only(left: 8.0, right: 8.0, bottom: 0.0, top: 8.0),
           child: SizedBox(
             height: 42.0,
             child: ListView(
@@ -38,15 +40,15 @@ class ActPage extends StatelessWidget {
                   runSpacing: 0.0,
                   children: List<Widget>.generate(
                       chipsArray.length, // place the length of the array here
-                          (int index) {
-                        return ChoiceChip(
-                          label: Text(chipsArray[index],
-                              style:
+                      (int index) {
+                    return ChoiceChip(
+                      label: Text(chipsArray[index],
+                          style:
                               TextStyle(color: Colors.black, fontSize: 16.0)),
-                          selected: _selectedValue == index,
-                          selectedColor: Color(0xFF4FEAA9),
-                        );
-                      }).toList(),
+                      selected: _selectedValue == index,
+                      selectedColor: Color(0xFF4FEAA9),
+                    );
+                  }).toList(),
                 ),
               ],
             ),

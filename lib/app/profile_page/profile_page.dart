@@ -42,7 +42,10 @@ class ProfilePage extends StatelessWidget {
             final User user = snapshot.data;
             if (user == null) {
               signInButton = [
-                Text('Guest'),
+                Text('Guest',
+                    style: TextStyle(
+                      fontSize: 18,
+                    )),
                 ElevatedButton(
                     onPressed: () => _openSignIn(context),
                     child: Text(
@@ -51,8 +54,12 @@ class ProfilePage extends StatelessWidget {
                     ))
               ];
             } else {
+              print(user.displayName);
               signInButton = [
-                Text(user.displayName ?? user.email ?? 'Anonymous'),
+                Text(user.displayName ?? "Anonymous",
+                    style: TextStyle(
+                      fontSize: 18,
+                    )),
                 ElevatedButton(
                     onPressed: () => _confirmSignOut(context),
                     child: Text(
