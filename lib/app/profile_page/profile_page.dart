@@ -54,7 +54,6 @@ class ProfilePage extends StatelessWidget {
                     ))
               ];
             } else {
-              print(user.displayName);
               signInButton = [
                 Text(user.displayName ?? "Anonymous",
                     style: TextStyle(
