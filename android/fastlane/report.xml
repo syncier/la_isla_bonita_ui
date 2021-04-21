@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="fastlane.lanes">
+    
+    
+    
+      
+      <testcase classname="fastlane.lanes" name="0: opt_out_usage" time="0.000384">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="1: default_platform" time="0.000257">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="2: Switch to android getBuildNameFromPubspec lane" time="0.000233">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="3: pwd" time="0.00731">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="4: grep 'version: ' ../../pubspec.yaml | awk -F '[ +]' {'print $2'} | tr -d '
+'" time="0.012949">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="5: echo 0.1.0-001 &gt; ../android_version_string.txt" time="0.005903">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="6: flutter clean" time="6.451959">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="7: flutter build appbundle --target-platform android-arm,android-arm64 --release --build-name 0.1.0 --build-number 001 --dart-define\=gitSHA\=" time="15.398476">
+        
+      </testcase>
+    
+  </testsuite>
+</testsuites>
