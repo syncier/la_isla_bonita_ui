@@ -8,6 +8,7 @@ name: Build & Test
 
 jobs:
   build-and-test:
+    environment: GooglePlay publish
     runs-on: ubuntu-latest
     steps:
     # - uses: actions/checkout@v1
