@@ -21,7 +21,6 @@ jobs:
 
     - run: |
         echo $JK_STORE_FILE | base64 -d > android/app/lib_key.jks
-        echo SHA1=${GITHUB_SHA::8} >> $GITHUB_ENV
       env:
         JK_STORE_FILE: ${{ secrets.JK_STORE_FILE }}
       name: set environment from secrets
@@ -37,16 +36,12 @@ jobs:
         lane: 'build_android'
         subdirectory: 'android'
         bundle-install-path: 'vendor/bundle'
-        # options: '{ "SHA1": "${{ process.env.version_SHA1 }}" }'
       env:
         JK_PASSWORD: ${{ secrets.JK_PASSWORD }}
         JK_ALIAS: "key"
         JK_STORE_PASSWORD: ${{ secrets.JK_STORE_PASSWORD }}
         SUPPLY_JSON_KEY_DATA: ${{ secrets.SUPPLY_JSON_KEY_DATA }}
         KEY_PATH: lib_key.jks
-
-    - run: echo version_string=$(cat android_version_string.txt) >> $GITHUB_ENV
-      name: get version string
 
     - uses: maierj/fastlane-action@v2.0.1
       if: ${{ github.ref == 'refs/heads/master' }}
@@ -56,7 +51,6 @@ jobs:
         lane: 'push_to_ps_internal'
         subdirectory: 'android'
         bundle-install-path: 'vendor/bundle'
-        # options: '{ "version_string": "${process.env.version_string}" }'
       env:
         JK_PASSWORD: ${{ secrets.JK_PASSWORD }}
         JK_ALIAS: "key"
