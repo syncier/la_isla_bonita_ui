@@ -1,0 +1,66 @@
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+
+name: Build & Test
+
+jobs:
+  build-and-deploy:
+    environment: GooglePlay publish
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '12.x'
+    - uses: subosito/flutter-action@v1
+      with:
+        channel: 'stable'
+
+    - run: |
+        echo $JK_STORE_FILE | base64 -d > android/app/lib_key.jks
+        echo SHA1=${GITHUB_SHA::8} >> $GITHUB_ENV
+      env:
+        JK_STORE_FILE: ${{ secrets.JK_STORE_FILE }}
+      name: set environment from secrets
+
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '2.7'
+
+    - uses: maierj/fastlane-action@v2.0.1
+      name: build android
+      with:
+        skip-tracking: true
+        lane: 'build_android'
+        subdirectory: 'android'
+        bundle-install-path: 'vendor/bundle'
+        # options: '{ "SHA1": "${{ process.env.version_SHA1 }}" }'
+      env:
+        JK_PASSWORD: ${{ secrets.JK_PASSWORD }}
+        JK_ALIAS: "key"
+        JK_STORE_PASSWORD: ${{ secrets.JK_STORE_PASSWORD }}
+        SUPPLY_JSON_KEY_DATA: ${{ secrets.SUPPLY_JSON_KEY_DATA }}
+        KEY_PATH: lib_key.jks
+
+    - run: echo version_string=$(cat android_version_string.txt) >> $GITHUB_ENV
+      name: get version string
+
+    - uses: maierj/fastlane-action@v2.0.1
+      if: ${{ github.ref == 'refs/heads/master' }}
+      name: deploy to PlayStore
+      with:
+        skip-tracking: true
+        lane: 'push_to_ps_internal'
+        subdirectory: 'android'
+        bundle-install-path: 'vendor/bundle'
+        # options: '{ "version_string": "${process.env.version_string}" }'
+      env:
+        JK_PASSWORD: ${{ secrets.JK_PASSWORD }}
+        JK_ALIAS: "key"
+        JK_STORE_PASSWORD: ${{ secrets.JK_STORE_PASSWORD }}
+        SUPPLY_JSON_KEY_DATA: ${{ secrets.SUPPLY_JSON_KEY_DATA }}
+        KEY_PATH: lib_key.jks
+
