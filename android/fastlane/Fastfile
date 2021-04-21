@@ -45,23 +45,24 @@ platform :android do
     Dir.chdir "../.." do
       sh("flutter", "clean")
       sh("flutter", "build", "appbundle", "--target-platform", "android-arm,android-arm64", "--release",
-        "--build-name", build_name, "--build-number", build_number, "--dart-define=gitSHA=#{sha1}")
+        "--build-name", build_name, "--build-number", build_number)
     end
   end
 
   lane :push_to_ps_internal do |options|
-    build_name, build_number = options[:version_string].split("-")
     upload_to_play_store(
-      version_code: build_number,
       aab: '../build/app/outputs/bundle/release/app-release.aab',
       skip_upload_images: true,
       skip_upload_screenshots: true,
-      release_status: draft,
+      release_status: 'draft',
       track: 'internal')
-    end
+  end
 
   lane :promote_to_alpha do |options|
-    build_name, build_number = options[:version_string].split("-")
+    if ENV["VERSION_STRING"].nil?
+      UI.user_error!("Environment variable VERSION_STRING needs to be set (e.g. 0.1.1-21041500)")
+    end
+    build_name, build_number = ENV["VERSION_STRING"]
     upload_to_play_store(
       version_code: build_number,
       track_promote_to: 'alpha',
@@ -70,6 +71,6 @@ platform :android do
       skip_upload_images: true,
       skip_upload_screenshots: true,
       track: 'internal')
-    end
+  end
 
 end
