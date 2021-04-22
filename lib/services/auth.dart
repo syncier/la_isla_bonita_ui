@@ -40,6 +40,7 @@ class Auth implements AuthBase {
         email: email, password: password);
     final user = userCredential.user;
     await user.updateProfile(displayName: username);
+    await user.sendEmailVerification();
 
     return user;
   }

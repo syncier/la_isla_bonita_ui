@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:la_isla_Bonita_ui/app/sign_in/confirm_email_page.dart';
 import 'package:la_isla_Bonita_ui/app/sign_in/sign_in_button.dart';
 import 'package:la_isla_Bonita_ui/common_widgets/show_exception_alert_dialog.dart';
 import 'package:la_isla_Bonita_ui/services/auth.dart';
@@ -47,8 +48,12 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 
   Future<void> _submit() async {
     try {
-      await widget.bloc.submit();
-      Navigator.pop(context);
+      final user = await widget.bloc.submit();
+      if (user.emailVerified) {
+        Navigator.pop(context);
+      } else {
+        Navigator.pushReplacementNamed(context, ConfirmEmail.id);
+      }
     } on FirebaseAuthException catch (e) {
       showExceptionAlertDialog(
         context,

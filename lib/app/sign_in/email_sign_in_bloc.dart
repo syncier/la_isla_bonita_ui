@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:la_isla_Bonita_ui/services/auth.dart';
 import 'package:rxdart/rxdart.dart';
@@ -19,7 +20,7 @@ class EmailSignInBloc {
     _modelSubject.close();
   }
 
-  Future<void> submit() async {
+  FutureOr<User> submit() async {
     updateWith(submitted: true, isLoading: true);
     try {
       if (_model.formType == EmailSignInFormType.signIn) {
@@ -29,8 +30,11 @@ class EmailSignInBloc {
             email: _model.email,
             password: _model.password,
             username: _model.username);
-
-        print(user.displayName);
+        // user.sendEmailVerification().then((_) {}).catchError((e) {
+        //   print(e);
+        // });
+        // Error occurred. Inspect error.code.
+        return user;
       }
     } catch (e) {
       updateWith(isLoading: false);
