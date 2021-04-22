@@ -21,6 +21,17 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+} else {
+    keystoreProperties.setProperty('storePassword', System.getenv('JK_STORE_PASSWORD') ?: "");
+    keystoreProperties.setProperty('keyPassword', System.getenv('JK_PASSWORD') ?: "" );
+    keystoreProperties.setProperty('keyAlias', System.getenv('JK_ALIAS') ?: "" );
+    keystoreProperties.setProperty('storeFile', System.getenv('KEY_PATH') ?: "" );
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
@@ -39,7 +50,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.la_isla_Bonita_ui"
+        applicationId "app.islabonita"
         minSdkVersion 16
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
@@ -47,11 +58,24 @@ android {
         multiDexEnabled true
     }
 
+    signingConfigs {
+        if (keystoreProperties['keyAlias']) {
+            release {
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+                storePassword keystoreProperties['storePassword']
+            }
+        }
+    }
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            if (keystoreProperties['keyAlias']) {
+                signingConfig signingConfigs.release
+            }
+            else {
+                signingConfig signingConfigs.debug
+            }
         }
     }
 }

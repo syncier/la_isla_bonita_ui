@@ -1,4 +1,4 @@
-package com.example.la_isla_Bonita_ui
+package app.islabonita
 
 import io.flutter.embedding.android.FlutterActivity
 

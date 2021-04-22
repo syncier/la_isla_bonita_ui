@@ -1,0 +1,76 @@
+opt_out_usage
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+
+platform :android do
+  lane :getNextBuildNumber do
+    version_codes = google_play_track_version_codes(track: "internal")
+    t = Time.now
+    today = t.strftime("%y%m%d")
+    if version_codes.length > 0 && version_codes[0].to_s.match(/#{today}/)
+      puts "got from playstore: #{version_codes[0].to_s} and today is #{today}"
+      version_code = (version_codes[0]+1).to_s
+    else
+      version_code = today + "00"
+    end
+  end
+
+  lane :getBuildNameFromPubspec do
+    curr_dir = sh("pwd")
+    build_name = sh "grep 'version: ' ../../pubspec.yaml | awk -F '[ +]' {'print $2'} | tr -d '\n'"
+  end
+
+  lane :build_android do |options|
+    build_name = getBuildNameFromPubspec
+    build_number = getNextBuildNumber
+    sha1 = options[:SHA1]
+    version_string = "#{build_name}-#{build_number}"
+    # save the version string for the GH action
+    sh "echo #{version_string} > ../android_version_string.txt"
+    Dir.chdir "../.." do
+      sh("flutter", "clean")
+      sh("flutter", "build", "appbundle", "--target-platform", "android-arm,android-arm64", "--release",
+        "--build-name", build_name, "--build-number", build_number)
+    end
+  end
+
+  lane :push_to_ps_internal do |options|
+    upload_to_play_store(
+      aab: '../build/app/outputs/bundle/release/app-release.aab',
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      release_status: 'draft',
+      track: 'internal')
+  end
+
+  lane :promote_to_alpha do |options|
+    if ENV["VERSION_STRING"].nil?
+      UI.user_error!("Environment variable VERSION_STRING needs to be set (e.g. 0.1.1-21041500)")
+    end
+    build_name, build_number = ENV["VERSION_STRING"]
+    upload_to_play_store(
+      version_code: build_number,
+      track_promote_to: 'alpha',
+      skip_upload_apk: true,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      track: 'internal')
+  end
+
+end
