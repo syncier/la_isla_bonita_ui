@@ -47,6 +47,7 @@ class SignInPage extends StatelessWidget {
   Future<void> _signInAnonymously(BuildContext context) async {
     try {
       await manager.signInAnonymously();
+      Navigator.pop(context);
     } on Exception catch (e) {
       _showSignInError(context, e);
     }
@@ -55,6 +56,7 @@ class SignInPage extends StatelessWidget {
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
       await manager.signInWithGoogle();
+      Navigator.pop(context);
     } on Exception catch (e) {
       _showSignInError(context, e);
     }
@@ -63,6 +65,7 @@ class SignInPage extends StatelessWidget {
   Future<void> _signInWithFacebook(BuildContext context) async {
     try {
       await manager.signInWithFacebook();
+      Navigator.pop(context);
     } on Exception catch (e) {
       _showSignInError(context, e);
     }
@@ -73,8 +76,8 @@ class SignInPage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: Text('Welcome!!!'),
-        elevation: 2.0,
+        title: Text('Hi there, \nWelcome'),
+        toolbarHeight: 80.0,
       ),
       body: _buildContent(context),
     );

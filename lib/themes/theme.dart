@@ -4,9 +4,10 @@ class AppTheme {
   AppTheme._();
 
   static final ThemeData lightTheme = ThemeData(
-    scaffoldBackgroundColor: Color(0xFFF4F5F4),
+    scaffoldBackgroundColor: Color(0xFFFAFBFF),
     appBarTheme: AppBarTheme(
-      color: Color(0xFF4FEAA9),
+      color: Color(0xFFFAFBFF),
+      elevation: 0.0,
       actionsIconTheme: IconThemeData(color: Color(0xFF151717), size: 24.0),
       textTheme: TextTheme(
         headline6: TextStyle(

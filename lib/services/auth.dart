@@ -7,20 +7,23 @@ abstract class AuthBase {
   Stream<User> authStateChanges();
   Future<User> signInAnonymously();
   Future<User> signInWithEmailAndPassword(String email, String password);
-  Future<User> createUserWithEmailAndPassword(String email, String password);
+  Future<User> createUserWithEmailAndPassword(
+      {String email, String password, String username});
 
   Future<User> signInWithGoogle();
 
   Future<User> signInWithFacebook();
 
   Future<void> signOut();
+
+  Future<void> resendEmail();
 }
 
 class Auth implements AuthBase {
   final _firebaseAuth = FirebaseAuth.instance;
 
   @override
-  Stream<User> authStateChanges() => _firebaseAuth.authStateChanges();
+  Stream<User> authStateChanges() => _firebaseAuth.userChanges();
 
   @override
   User get currentUser => _firebaseAuth.currentUser;
@@ -34,10 +37,14 @@ class Auth implements AuthBase {
 
   @override
   Future<User> createUserWithEmailAndPassword(
-      String email, String password) async {
+      {String email, String password, String username}) async {
     final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
-    return userCredential.user;
+    final user = userCredential.user;
+    await user.updateProfile(displayName: username);
+    await user.sendEmailVerification();
+
+    return user;
   }
 
   @override
@@ -53,7 +60,8 @@ class Auth implements AuthBase {
       final FacebookAuthCredential credential = FacebookAuthProvider.credential(
         accessToken.token,
       );
-      final userCredential = await _firebaseAuth.signInWithCredential(credential);
+      final userCredential =
+          await _firebaseAuth.signInWithCredential(credential);
       return userCredential.user;
     } on FacebookAuthException catch (e) {
       // handle the FacebookAuthException
@@ -96,5 +104,11 @@ class Auth implements AuthBase {
     final googleSignIn = GoogleSignIn();
     await googleSignIn.signOut();
     await _firebaseAuth.signOut();
+  }
+
+  @override
+  Future<void> resendEmail() async {
+    final currentUser = await _firebaseAuth.currentUser;
+    return await currentUser.sendEmailVerification();
   }
 }

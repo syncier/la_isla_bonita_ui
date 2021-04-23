@@ -9,6 +9,7 @@ import 'package:la_isla_Bonita_ui/themes/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
+import 'app/sign_in/confirm_email_page.dart';
 import 'blocs/blocs.dart';
 
 Future<void> main() async {
@@ -35,15 +36,17 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provider<AuthBase>(
-      create: (context) => Auth(),
-      child: MaterialApp(
-        title: 'La Isla Bonita',
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        home: BlocProvider(
-            create: (context) => NewsBloc(newsRepository: newsRepository),
-            child: LandingPage()),
-      ),
-    );
+        create: (context) => Auth(),
+        child: MaterialApp(
+          title: 'La Isla Bonita',
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          routes: {
+            '/': (context) => BlocProvider(
+                create: (context) => NewsBloc(newsRepository: newsRepository),
+                child: LandingPage()),
+            ConfirmEmail.id: (context) => ConfirmEmail(),
+          },
+        ));
   }
 }

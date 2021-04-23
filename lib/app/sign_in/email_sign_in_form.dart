@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:la_isla_Bonita_ui/app/sign_in/confirm_email_page.dart';
 import 'package:la_isla_Bonita_ui/app/sign_in/sign_in_button.dart';
 import 'package:la_isla_Bonita_ui/common_widgets/show_exception_alert_dialog.dart';
 import 'package:la_isla_Bonita_ui/services/auth.dart';
@@ -29,8 +31,10 @@ class EmailSignInForm extends StatefulWidget {
 }
 
 class _EmailSignInFormState extends State<EmailSignInForm> {
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final FocusNode _usernameFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
 
@@ -45,7 +49,12 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 
   Future<void> _submit() async {
     try {
-      await widget.bloc.submit();
+      final user = await widget.bloc.submit();
+      if (user != null && user.emailVerified) {
+        Navigator.pop(context);
+      } else {
+        Navigator.pushReplacementNamed(context, ConfirmEmail.id);
+      }
     } on FirebaseAuthException catch (e) {
       showExceptionAlertDialog(
         context,
@@ -56,9 +65,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   }
 
   void _emailEditingComplete(EmailSignInModel model) {
-    final newFocus = model.emailValidator.isValid(model.email)
-        ? _passwordFocusNode
-        : _emailFocusNode;
+    final newFocus = _emailFocusNode;
     FocusScope.of(context).requestFocus(newFocus);
   }
 
@@ -71,6 +78,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   List<Widget> _buildChildren(EmailSignInModel model) {
     return [
       _buildHeader(model),
+      ..._buildSignUpFields(model),
       _buildEmailTextField(model),
       SizedBox(height: 8.0),
       _buildPasswordTextField(model),
@@ -80,7 +88,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         onPressed: model.canSubmit ? _submit : null,
       ),
       SizedBox(height: 8.0),
-      FlatButton(
+      TextButton(
         child: Text(model.secondaryButtonText),
         onPressed: !model.isLoading ? _toggleFormType : null,
       ),
@@ -92,6 +100,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       controller: _passwordController,
       focusNode: _passwordFocusNode,
       decoration: InputDecoration(
+        prefixIcon: Icon(Icons.lock_outline),
         labelText: 'Password',
         errorText: model.passwordErrorText,
         enabled: model.isLoading == false,
@@ -108,6 +117,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       controller: _emailController,
       focusNode: _emailFocusNode,
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.only(left: 0),
+        prefixIcon: Icon(Icons.mail_outline),
         labelText: 'Email',
         hintText: 'test@test.com',
         errorText: model.emailErrorText,
@@ -119,6 +130,32 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       onChanged: widget.bloc.updateEmail,
       onEditingComplete: () => _emailEditingComplete(model),
     );
+  }
+
+  List<Widget> _buildSignUpFields(EmailSignInModel model) {
+    if (model.formType == EmailSignInFormType.register) {
+      return [
+        TextField(
+          controller: _usernameController,
+          focusNode: _usernameFocusNode,
+          decoration: InputDecoration(
+            prefixIcon: Icon(Icons.tag_faces_outlined),
+            labelText: 'Name',
+            hintText: 'Name',
+            enabled: model.isLoading == false,
+          ),
+          autocorrect: false,
+          keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.next,
+          onChanged: widget.bloc.updateUsername,
+          onEditingComplete: () => _emailEditingComplete(model),
+        )
+      ];
+    }
+
+    if (model.formType == EmailSignInFormType.signIn) {
+      return [];
+    }
   }
 
   @override
@@ -142,10 +179,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         child: CircularProgressIndicator(),
       );
     }
-    return Text(
-      model.headerText,
-      textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.w600),
+    return SizedBox(
+      height: 16.0,
     );
   }
 }
