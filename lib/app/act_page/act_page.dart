@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ActPage extends StatelessWidget {
   static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+      TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold);
 
   int _selectedValue = 0;
 
@@ -22,7 +22,7 @@ class ActPage extends StatelessWidget {
           height: 40,
         ),
         Text(
-          'Index 1: Act',
+          'Act',
           style: optionStyle,
         ),
         Padding(

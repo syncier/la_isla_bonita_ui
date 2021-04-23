@@ -1,13 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:la_isla_Bonita_ui/app/sign_in/sign_in_page.dart';
+import 'package:la_isla_Bonita_ui/common_widgets/custom_raised_button.dart';
 import 'package:la_isla_Bonita_ui/common_widgets/show_alert_dialog.dart';
 import 'package:la_isla_Bonita_ui/services/auth.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
   static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+      TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
 
   void _signOut(BuildContext context) async {
     try {
@@ -42,28 +43,34 @@ class ProfilePage extends StatelessWidget {
             final User user = snapshot.data;
             if (user == null) {
               signInButton = [
-                Text('Guest',
-                    style: TextStyle(
-                      fontSize: 18,
-                    )),
-                ElevatedButton(
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 16.0, 0, 16.0),
+                  child: Text('Let\'s create an account!',
+                      style: TextStyle(
+                        fontSize: 18,
+                      )),
+                ),
+                CustomElevatedButton(
                     onPressed: () => _openSignIn(context),
                     child: Text(
-                      'Sign in',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
+                      'Sign up',
+                      style: TextStyle(fontSize: 18),
                     ))
               ];
             } else {
               signInButton = [
-                Text(user.displayName ?? "Anonymous",
-                    style: TextStyle(
-                      fontSize: 18,
-                    )),
-                ElevatedButton(
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 16.0, 0, 16.0),
+                  child: Text(user.displayName ?? "Anonymous",
+                      style: TextStyle(
+                        fontSize: 18,
+                      )),
+                ),
+                CustomElevatedButton(
                     onPressed: () => _confirmSignOut(context),
                     child: Text(
                       'Log out',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
+                      style: TextStyle(fontSize: 18),
                     ))
               ];
             }
@@ -74,7 +81,7 @@ class ProfilePage extends StatelessWidget {
                 height: 40.0,
               ),
               Text(
-                'Index 2: Profile',
+                'Profile',
                 style: optionStyle,
               ),
               ...signInButton,

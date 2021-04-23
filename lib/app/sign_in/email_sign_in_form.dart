@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:la_isla_Bonita_ui/app/sign_in/confirm_email_page.dart';
@@ -49,7 +50,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   Future<void> _submit() async {
     try {
       final user = await widget.bloc.submit();
-      if (user.emailVerified) {
+      if (user != null && user.emailVerified) {
         Navigator.pop(context);
       } else {
         Navigator.pushReplacementNamed(context, ConfirmEmail.id);
@@ -115,6 +116,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       controller: _emailController,
       focusNode: _emailFocusNode,
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.only(left: 0),
+        prefixIcon: Icon(Icons.mail_outline),
         labelText: 'Email',
         hintText: 'test@test.com',
         errorText: model.emailErrorText,
@@ -135,7 +138,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
           controller: _usernameController,
           focusNode: _usernameFocusNode,
           decoration: InputDecoration(
-            icon: Icon(Icons.tag_faces_outlined),
+            prefixIcon: Icon(Icons.tag_faces_outlined),
             labelText: 'Name',
             hintText: 'Name',
             enabled: model.isLoading == false,
@@ -175,10 +178,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         child: CircularProgressIndicator(),
       );
     }
-    return Text(
-      model.headerText,
-      textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.w600),
+    return SizedBox(
+      height: 16.0,
     );
   }
 }

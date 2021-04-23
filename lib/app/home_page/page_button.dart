@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:la_isla_Bonita_ui/common_widgets/custom_raised_button.dart';
 
-class PageButton extends CustomRaisedButton {
+class PageButton extends CustomElevatedButton {
   PageButton({
     String text,
     Color color,

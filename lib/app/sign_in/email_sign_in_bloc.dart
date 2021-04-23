@@ -24,7 +24,9 @@ class EmailSignInBloc {
     updateWith(submitted: true, isLoading: true);
     try {
       if (_model.formType == EmailSignInFormType.signIn) {
-        await auth.signInWithEmailAndPassword(_model.email, _model.password);
+        final u = await auth.signInWithEmailAndPassword(
+            _model.email, _model.password);
+        return u;
       } else {
         final user = await auth.createUserWithEmailAndPassword(
             email: _model.email,

@@ -16,6 +16,12 @@ class ConfirmEmail extends StatelessWidget {
       backgroundColor: Color(PAGE_COLOR),
       appBar: AppBar(
         elevation: 0.0,
+        actions: <Widget>[
+          new IconButton(
+            icon: new Icon(Icons.close),
+            onPressed: () => Navigator.of(context).pop(null),
+          ),
+        ],
         backgroundColor: Color(PAGE_COLOR),
       ),
       body: Container(

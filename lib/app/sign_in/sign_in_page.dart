@@ -76,8 +76,8 @@ class SignInPage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: Text('Welcome!!!'),
-        elevation: 2.0,
+        title: Text('Hi there, \nWelcome'),
+        toolbarHeight: 80.0,
       ),
       body: _buildContent(context),
     );
