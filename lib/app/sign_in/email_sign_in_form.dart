@@ -100,6 +100,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       controller: _passwordController,
       focusNode: _passwordFocusNode,
       decoration: InputDecoration(
+        prefixIcon: Icon(Icons.lock_outline),
         labelText: 'Password',
         errorText: model.passwordErrorText,
         enabled: model.isLoading == false,
