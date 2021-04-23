@@ -15,6 +15,8 @@ abstract class AuthBase {
   Future<User> signInWithFacebook();
 
   Future<void> signOut();
+
+  Future<void> resendEmail();
 }
 
 class Auth implements AuthBase {
@@ -102,5 +104,11 @@ class Auth implements AuthBase {
     final googleSignIn = GoogleSignIn();
     await googleSignIn.signOut();
     await _firebaseAuth.signOut();
+  }
+
+  @override
+  Future<void> resendEmail() async {
+    final currentUser = await _firebaseAuth.currentUser;
+    return await currentUser.sendEmailVerification();
   }
 }

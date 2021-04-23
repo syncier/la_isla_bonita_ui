@@ -30,10 +30,7 @@ class EmailSignInBloc {
             email: _model.email,
             password: _model.password,
             username: _model.username);
-        // user.sendEmailVerification().then((_) {}).catchError((e) {
-        //   print(e);
-        // });
-        // Error occurred. Inspect error.code.
+
         return user;
       }
     } catch (e) {
