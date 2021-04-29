@@ -73,6 +73,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     widget.bloc.toggleFormType();
     _emailController.clear();
     _passwordController.clear();
+    _usernameController.clear();
   }
 
   List<Widget> _buildChildren(EmailSignInModel model) {
