@@ -7,7 +7,7 @@ on:
 name: Build & Test
 
 jobs:
-  build-and-deploy:
+  build-test-deploy:
     environment: GooglePlay publish
     runs-on: ubuntu-latest
     steps:
@@ -18,12 +18,20 @@ jobs:
     - uses: subosito/flutter-action@v1
       with:
         channel: 'stable'
+        flutter-version: "2.0.5"
 
     - run: |
         echo $JK_STORE_FILE | base64 -d > android/app/lib_key.jks
       env:
         JK_STORE_FILE: ${{ secrets.JK_STORE_FILE }}
       name: set environment from secrets
+
+    - run: |
+        flutter --version
+        flutter pub get
+        # flutter analyze
+        flutter test
+      name: run tests
 
     - uses: ruby/setup-ruby@v1
       with:

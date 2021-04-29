@@ -43,6 +43,7 @@ platform :android do
     # save the version string for the GH action
     sh "echo #{version_string} > ../android_version_string.txt"
     Dir.chdir "../.." do
+      sh("flutter", "config", "--no-analytics")
       sh("flutter", "clean")
       sh("flutter", "build", "appbundle", "--target-platform", "android-arm,android-arm64", "--release",
         "--build-name", build_name, "--build-number", build_number)
