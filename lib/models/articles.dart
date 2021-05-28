@@ -14,7 +14,7 @@ class NewsApiResponse {
         error = "";
 
   NewsApiResponse.withError(String errorValue)
-      : articles = List(),
+      : articles = [],
         error = errorValue;
 }
 
