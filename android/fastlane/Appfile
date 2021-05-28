@@ -1,1 +1,1 @@
-package_name("com.example.la_isla_Bonita_ui") # e.g. com.krausefx.app
+package_name("app.islabonita") # e.g. com.krausefx.app
