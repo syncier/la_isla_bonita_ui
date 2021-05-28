@@ -9,16 +9,40 @@
       "client_info": {
         "mobilesdk_app_id": "1:452151120024:android:c1ce58d7dc48e4fedfc0ed",
         "android_client_info": {
-          "package_name": "app.islabonita"
+          "package_name": "com.example.la_isla_Bonita_ui"
         }
       },
       "oauth_client": [
         {
+          "client_id": "452151120024-11e618u656nt1d4rgb4h90996n928mue.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.la_isla_Bonita_ui",
+            "certificate_hash": "589233997f73116252c474835272927b2d07e76e"
+          }
+        },
+        {
           "client_id": "452151120024-bfqkegtrl3bpv4rkbeh28a02picvn28p.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "app.islabonita",
+            "package_name": "com.example.la_isla_Bonita_ui",
             "certificate_hash": "4fdac2af309ad9814e4c274626de465673c2b747"
+          }
+        },
+        {
+          "client_id": "452151120024-inctsstr2p6mc81qp0930ohpefsbpgpn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.la_isla_Bonita_ui",
+            "certificate_hash": "4b8b587433a9cda2a591767d39e43570939dd42c"
+          }
+        },
+        {
+          "client_id": "452151120024-lgi8vaschgslque7ulom69t1ti45gpnj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.la_isla_Bonita_ui",
+            "certificate_hash": "673b8f524cfb72218c85e21bb747dd7fc667c7aa"
           }
         },
         {
@@ -37,6 +61,13 @@
             {
               "client_id": "452151120024-lif4ua6r44ki6ch1tlur48rqppddnqhf.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "452151120024-4sevpqk47htn651g701kjlou3mrpb0c2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.laIslaBonitaUi"
+              }
             }
           ]
         }
