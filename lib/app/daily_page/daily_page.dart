@@ -55,9 +55,9 @@ class DailyPage extends StatelessWidget {
   List<StoryItem> _buildStoryItems(NewsState state) {
     if (state is NewsLoadSuccess) {
       return state.news.articles.map((a) {
-        print(a.urlToImage);
+        print(a.imageURL);
         return StoryItem.inlineImage(
-            url: a.urlToImage,
+            url: a.imageURL,
             caption: Text(
               a.title,
               style: TextStyle(fontSize: 24.0, color: Colors.white),

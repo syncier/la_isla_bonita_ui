@@ -12,6 +12,6 @@ class NewsRepository {
       : assert(newsApiClient != null);
 
   Future<NewsApiResponse> getNews(ArticlesQuery query) async {
-    return newsApiClient.fetchWeather(query);
+    return newsApiClient.fetchNews(query);
   }
 }
