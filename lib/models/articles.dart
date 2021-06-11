@@ -8,9 +8,8 @@ class NewsApiResponse {
   NewsApiResponse(this.articles, this.error);
 
   NewsApiResponse.fromJson(Map<String, dynamic> json)
-      : articles = (json["articles"] as List)
-            .map((i) => new Article.fromJson(i))
-            .toList(),
+      : articles =
+            (json["content"] as List).map((i) => Article.fromJson(i)).toList(),
         error = "";
 
   NewsApiResponse.withError(String errorValue)
@@ -19,35 +18,32 @@ class NewsApiResponse {
 }
 
 class Article extends Equatable {
-  final String author;
+  final num id;
   final String title;
   final String description;
-  final String url;
-  final String urlToImage;
+  final String imageURL;
   final String content;
-  final ArticleSource source;
+  final String sourceURL;
 
-  const Article(this.author, this.title, this.description, this.url,
-      this.urlToImage, this.content, this.source);
+  const Article(this.title, this.id, this.description, this.imageURL,
+      this.content, this.sourceURL);
 
   Article.fromJson(Map<String, dynamic> json)
-      : author = json["author"],
-        title = json["title"],
+      : title = json["title"],
+        id = json["id"],
         description = json["description"],
-        url = json["url"],
-        urlToImage = json["urlToImage"],
+        imageURL = json["imageURL"],
         content = json["content"],
-        source = ArticleSource.fromJson(json["source"]);
+        sourceURL = json["sourceURL"];
 
   @override
   List<Object> get props => [
-        author,
         title,
+        id,
         description,
-        url,
-        urlToImage,
+        imageURL,
         content,
-        source,
+        sourceURL,
       ];
 }
 
