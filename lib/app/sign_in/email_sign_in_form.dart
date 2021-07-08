@@ -3,27 +3,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:la_isla_Bonita_ui/app/sign_in/confirm_email_page.dart';
-import 'package:la_isla_Bonita_ui/app/sign_in/sign_in_button.dart';
 import 'package:la_isla_Bonita_ui/common_widgets/show_exception_alert_dialog.dart';
-import 'package:la_isla_Bonita_ui/services/auth.dart';
 import 'package:provider/provider.dart';
 
 import 'email_sign_in_bloc.dart';
 import 'email_sign_in_model.dart';
 
 class EmailSignInForm extends StatefulWidget {
-  EmailSignInForm({@required this.bloc});
   final EmailSignInBloc bloc;
+  static final GlobalKey<_EmailSignInFormState> globalKey = GlobalKey();
+  EmailSignInForm({@required this.bloc, Key key}): super(key: globalKey);
 
   static Widget create(BuildContext context) {
-    final auth = Provider.of<AuthBase>(context, listen: false);
-    return Provider<EmailSignInBloc>(
-      create: (_) => EmailSignInBloc(auth: auth),
-      child: Consumer<EmailSignInBloc>(
-        builder: (_, bloc, __) => EmailSignInForm(bloc: bloc),
-      ),
-      dispose: (_, bloc) => bloc.dispose(),
-    );
+    final bloc = Provider.of<EmailSignInBloc>(context, listen: false);
+    return EmailSignInForm(bloc: bloc);
   }
 
   @override
@@ -69,7 +62,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     FocusScope.of(context).requestFocus(newFocus);
   }
 
-  void _toggleFormType() {
+  void toggleFormType() {
     widget.bloc.toggleFormType();
     _emailController.clear();
     _passwordController.clear();
@@ -83,16 +76,6 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       _buildEmailTextField(model),
       SizedBox(height: 8.0),
       _buildPasswordTextField(model),
-      SizedBox(height: 90.0),
-      SignInButton(
-        text: model.primaryButtonText,
-        onPressed: model.canSubmit ? _submit : null,
-      ),
-      SizedBox(height: 8.0),
-      TextButton(
-        child: Text(model.secondaryButtonText),
-        onPressed: !model.isLoading ? _toggleFormType : null,
-      ),
     ];
   }
 
