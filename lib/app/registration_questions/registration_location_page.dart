@@ -20,6 +20,19 @@ class RegistrationLocationPage extends StatelessWidget {
             style: TextStyle(fontSize: 16.0),
           ),
         ),
+        TextField(
+          decoration: InputDecoration(
+            prefixIcon: Icon(Icons.location_pin),
+            labelText: 'Location',
+            hintText: 'Location',
+          ),
+          autocorrect: false,
+          keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.done,
+          onChanged: (change) {
+
+          },
+        ),
       ],
     );
   }

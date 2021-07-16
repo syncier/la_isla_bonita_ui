@@ -5,11 +5,13 @@ class RegistrationSlider extends StatefulWidget {
   final SliderCallback onChanged;
   final String leftLabel;
   final String rightLabel;
+  double preselectedValue;
 
-  const RegistrationSlider(
+  RegistrationSlider(
       {Key key,
       this.divisions: 4,
       this.onChanged,
+      this.preselectedValue: 50.0,
       this.leftLabel: '',
       this.rightLabel: ''})
       : super(key: key);
@@ -19,14 +21,12 @@ class RegistrationSlider extends StatefulWidget {
 }
 
 class _RegistrationSliderState extends State<RegistrationSlider> {
-  double _currentSliderValue = 0;
-
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Slider(
-          value: _currentSliderValue,
+          value: widget.preselectedValue,
           min: 0,
           max: 100,
           divisions: widget.divisions,
@@ -34,7 +34,7 @@ class _RegistrationSliderState extends State<RegistrationSlider> {
           inactiveColor: Color(0xFFE2E6FB),
           onChanged: (double value) {
             setState(() {
-              _currentSliderValue = value;
+              widget.preselectedValue = value;
               widget.onChanged(value);
             });
           },
